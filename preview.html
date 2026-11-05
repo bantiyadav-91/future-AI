@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FutureLife AI | Your Future Planner</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0b1220;
+    color: #edf3ff;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1150px;
+    margin: auto;
+    padding: 25px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: #70a5ff;
+}
+
+.logo span {
+    color: #65e0d0;
+}
+
+.hero {
+    margin-bottom: 35px;
+}
+
+.hero h1 {
+    font-size: 43px;
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+
+.hero h1 span {
+    color: #70a5ff;
+}
+
+.hero p {
+    color: #9aabc3;
+    max-width: 650px;
+}
+
+.panel {
+    background: #111c2e;
+    border: 1px solid #26364e;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 22px;
+}
+
+.panel h2 {
+    margin-bottom: 20px;
+    font-size: 21px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.field {
+    margin-bottom: 5px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #c1cde0;
+    font-size: 14px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 13px;
+    background: #0b1525;
+    color: white;
+    border: 1px solid #344a68;
+    border-radius: 8px;
+    outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #70a5ff;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 85px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+button {
+    border: none;
+    padding: 13px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 8px 5px 0 0;
+}
+
+.primary {
+    background: linear-gradient(100deg, #70a5ff, #65e0d0);
+    color: #071322;
+}
+
+.secondary {
+    background: #243750;
+    color: white;
+}
+
+button:hover {
+    opacity: .85;
+}
+
+.results {
+    display: none;
+    margin-top: 30px;
+}
+
+.results.show {
+    display: block;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.card {
+    background: #17243a;
+    border: 1px solid #344a68;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.card h3 {
+    color: #70a5ff;
+    margin-bottom: 12px;
+}
+
+.card p, .card li {
+    color: #b6c5d9;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.card ul {
+    padding-left: 20px;
+}
+
+.wide {
+    grid-column: 1 / -1;
+}
+
+.metric {
+    display: inline-block;
+    background: #243750;
+    padding: 9px;
+    margin: 5px;
+    border-radius: 7px;
+    font-size: 13px;
+}
+
+footer {
+    text-align: center;
+    color: #8294ad;
+    padding: 30px 0;
+    font-size: 13px;
+}
+
+@media(max-width:700px) {
+    .grid, .result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wide, .full {
+        grid-column: auto;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    header {
+        margin-bottom: 25px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+}
+
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+
+    .panel, .card {
+        background: white;
+        color: black;
+        border: 1px solid #ccc;
+    }
+
+    button, header, .hero, footer {
+        display: none;
+    }
+
+    .results {
+        display: block;
+    }
+
+    .card p, .card li {
+        color: black;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <div class="logo">✦ FutureLife <span>AI</span></div>
+    <div>Personal Future Planner</div>
+</header>
+
+<section class="hero">
+    <h1>Your future is not fixed.<br>
+    <span>Your next step matters.</span></h1>
+
+    <p>
+        Understand your current situation, explore possible future
+        paths and create a practical plan to improve your life.
+    </p>
+</section>
+
+<section class="panel">
+    <h2>01. Your Personal Information</h2>
+
+    <div class="grid">
+
+        <div class="field">
+            <label>Your Age</label>
+            <input type="number" id="age" placeholder="Example: 21">
+        </div>
+
+        <div class="field">
+            <label>Current Status</label>
+            <select id="status">
+                <option>Student</option>
+                <option>Working</option>
+                <option>Unemployed</option>
+                <option>Freelancer</option>
+                <option>Business Owner</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>Monthly Income (₹)</label>
+            <input type="number" id="income" placeholder="8000">
+        </div>
+
+        <div class="field">
+            <label>Monthly Expenses (₹)</label>
+            <input type="number" id="expenses" placeholder="5000">
+        </div>
+
+        <div class="field">
+            <label>Daily Study Hours</label>
+            <input type="number" id="hours" placeholder="3">
+        </div>
+
+        <div class="field">
+            <label>Future Planning Period</label>
+            <select id="period">
+                <option>6 Months</option>
+                <option selected>1 Year</option>
+                <option>3 Years</option>
+                <option>5 Years</option>
+            </select>
+        </div>
+
+        <div class="field full">
+            <label>Your Skills</label>
+            <textarea id="skills" placeholder="Java, HTML, communication, computer skills..."></textarea>
+        </div>
+
+        <div class="field full">
+            <label>Your Daily Habits</label>
+            <textarea id="habits" placeholder="Study, exercise, phone usage, sleeping routine..."></textarea>
+        </div>
+
+        <div class="field full">
+            <label>Your Challenges</label>
+            <textarea id="challenges" placeholder="Lack of confidence, weak maths, lack of experience..."></textarea>
+        </div>
+
+        <div class="field full">
+            <label>Your Main Goal</label>
+            <textarea id="goal" placeholder="Get a Java developer job, start a business..."></textarea>
+        </div>
+
+    </div>
+</section>
+
+<section class="panel">
+    <h2>02. Ask Your Own Question</h2>
+
+    <textarea id="question"
+    placeholder="What should I do to improve my future?"></textarea>
+
+    <br>
+
+    <button class="primary" onclick="generateReport()">
+        Generate My Future Report ↗
+    </button>
+
+    <button class="secondary" onclick="sampleData()">
+        Load Sample Data
+    </button>
+
+    <button class="secondary" onclick="resetData()">
+        Reset
+    </button>
+</section>
+
+<section class="results" id="results">
+
+    <h2 style="margin-bottom:20px;">Your Future Planning Report</h2>
+
+    <div class="result-grid" id="report"></div>
+
+    <br>
+
+    <button class="primary" onclick="downloadReport()">
+        Download Report
+    </button>
+
+    <button class="secondary" onclick="window.print()">
+        Print Report
+    </button>
+
+</section>
+
+<footer>
+    FutureLife AI © 2026 | Plan thoughtfully. Act consistently.
+</footer>
+
+</div>
+
+<script>
+
+let reportText = "";
+
+function getValue(id) {
+    return document.getElementById(id).value.trim();
+}
+
+function safe(text) {
+    return String(text).replace(/[&<>"']/g, function(c) {
+        return {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[c];
+    });
+}
+
+function generateReport() {
+
+    const age = Number(getValue("age")) || 0;
+    const income = Number(getValue("income")) || 0;
+    const expenses = Number(getValue("expenses")) || 0;
+    const hours = Number(getValue("hours")) || 0;
+
+    const status = getValue("status");
+    const period = getValue("period");
+
+    const skills = getValue("skills") || "Not provided";
+    const habits = getValue("habits") || "Not provided";
+    const challenges = getValue("challenges") || "Not provided";
+
+    const goal = getValue("goal") || "Build a better future";
+    const question = getValue("question");
+
+    if (!age || age < 13 || age > 100) {
+        alert("Please enter a valid age.");
+        return;
+    }
+
+    if (!getValue("goal")) {
+        alert("Please enter your main goal.");
+        return;
+    }
+
+    const balance = income - expenses;
+
+    let risks = [];
+
+    if (hours < 1) {
+        risks.push("You spend less than one hour learning daily. Try to build a regular learning habit.");
+    }
+
+    if (income > 0 && balance < 0) {
+        risks.push("Your expenses are higher than your income. Review your spending.");
+    }
+
+    if (challenges === "Not provided") {
+        risks.push("Write down your challenges so you can work on them.");
+    }
+
+    if (risks.length === 0) {
+        risks.push("Stay consistent and review your progress every week.");
+    }
+
+    const actions = [
+        "Choose one important skill related to your goal.",
+        "Give fixed time every day to learning and practice.",
+        "Build a small practical project to show your skills.",
+        "Ask teachers or experienced people for feedback.",
+        "Review your progress every Sunday.",
+        "Improve one weakness at a time."
+    ];
+
+    const scenarios = [
+        {
+            title: "Positive Scenario",
+            text: "If you follow a regular routine, improve your skills and take action, you can become better prepared for opportunities."
+        },
+        {
+            title: "Average Scenario",
+            text: "If you work sometimes but do not follow a fixed routine, your progress may be slow."
+        },
+        {
+            title: "Risk Scenario",
+            text: "If you avoid practice and keep delaying your goals, you may miss useful opportunities."
+        }
+    ];
+
+    const cards = [
+        {
+            title: "Your Current Situation",
+            content: `
+                <p>Age: ${age}</p>
+                <p>Status: ${safe(status)}</p>
+                <p>Planning period: ${safe(period)}</p>
+                <p>Daily learning hours: ${hours}</p>
+                <p>Main goal: ${safe(goal)}</p>
+            `
+        },
+        {
+            title: "Financial Overview",
+            content: `
+                <p>Monthly Income: ₹${income.toLocaleString("en-IN")}</p>
+                <p>Monthly Expenses: ₹${expenses.toLocaleString("en-IN")}</p>
+                <p>Monthly Balance: ₹${balance.toLocaleString("en-IN")}</p>
+                <p>${balance >= 0 ? "Your entered income covers your entered expenses." : "Your expenses are higher than your income."}</p>
+            `
+        },
+        {
+            title: "Your Skills and Habits",
+            content: `
+                <p><b>Skills:</b> ${safe(skills)}</p>
+                <p><b>Habits:</b> ${safe(habits)}</p>
+                <p><b>Challenges:</b> ${safe(challenges)}</p>
+            `
+        },
+        {
+            title: "Possible Future Scenarios",
+            content: scenarios.map(s =>
+                `<p><b>${s.title}</b><br>${s.text}</p>`
+            ).join("")
+        },
+        {
+            title: "Risks to Watch",
+            content: `<ul>${risks.map(r => `<li>${r}</li>`).join("")}</ul>`
+        },
+        {
+            title: "Your Recommended Action Plan",
+            content: `<ul>${actions.map(a => `<li>${a}</li>`).join("")}</ul>`
+        },
+        {
+            title: "Your Question",
+            content: question
+                ? `<p>${safe(question)}</p><p>Break this question into small tasks and review the action plan above.</p>`
+                : "<p>No additional question provided.</p>"
+        }
+    ];
+
+    document.getElementById("report").innerHTML =
+        cards.map((card, index) => `
+            <div class="card ${index === 3 || index === 5 ? "wide" : ""}">
+                <h3>${card.title}</h3>
+                ${card.content}
+            </div>
+        `).join("");
+
+    reportText = cards.map(card =>
+        card.title + "\n" +
+        card.content.replace(/<[^>]*>/g, " ").replace(/&amp;/g, "&")
+    ).join("\n\n");
+
+    document.getElementById("results").classList.add("show");
+
+    document.getElementById("results").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+function sampleData() {
+
+    document.getElementById("age").value = 21;
+    document.getElementById("status").value = "Student";
+    document.getElementById("income").value = 8000;
+    document.getElementById("expenses").value = 5000;
+    document.getElementById("hours").value = 3;
+    document.getElementById("period").value = "1 Year";
+
+    document.getElementById("skills").value =
+        "Beginner Java, HTML, Basic Computer Skills";
+
+    document.getElementById("habits").value =
+        "Study 3 hours daily. Use social media in free time.";
+
+    document.getElementById("challenges").value =
+        "Limited experience, weak problem solving and confidence.";
+
+    document.getElementById("goal").value =
+        "Get an entry-level Java Developer job.";
+
+    document.getElementById("question").value =
+        "What should I focus on during the next 6 months?";
+}
+
+function resetData() {
+
+    document.querySelectorAll("input, textarea").forEach(element => {
+        element.value = "";
+    });
+
+    document.getElementById("results").classList.remove("show");
+    document.getElementById("report").innerHTML = "";
+
+    reportText = "";
+}
+
+function downloadReport() {
+
+    if (!reportText) return;
+
+    const file = new Blob([reportText], {
+        type: "text/plain"
+    });
+
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(file);
+    link.download = "FutureLife-AI-Report.txt";
+
+    link.click();
+
+    URL.revokeObjectURL(link.href);
+}
+
+</script>
+
+</body>
+</html>
